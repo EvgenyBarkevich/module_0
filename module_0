@@ -1,0 +1,38 @@
+def game_core(number):
+    '''Функция получает рандомное число, угадывает его и возвращает число попыток, которые потребовались для угадывания числа'''
+    import numpy as np                          
+    number = np.random.randint(1,101)    # загадали число
+    
+    a = [] # создем список, в котором будет выполняться поиск
+    for i in range(101):
+        a.append(i)
+    a.sort()
+
+    mid = len(a) // 2
+    low = 0
+    high = len(a) - 1
+
+    count = 1 # вводим счетчик циклов
+
+    while a[mid] != number and low <= high: # реализуем бинарный поиск
+        if number > a[mid]:
+            low = mid+1
+        else:
+            high = mid-1
+        mid = (low+high) // 2
+        count = count+1
+    return(count)
+
+def score_game(game_core):
+    '''Запускаем игру 1000 раз, чтобы узнать, как быстро игра угадывает число'''
+    count_ls = []
+    np.random.seed(1)  # фиксируем RANDOM SEED, чтобы ваш эксперимент был воспроизводим!
+    random_array = np.random.randint(1,101, size=(1000))
+    
+    for number in random_array:
+        count_ls.append(game_core(number))
+    score = int(np.mean(count_ls))
+    print(f"Ваш алгоритм угадывает число в среднем за {score} попыток")
+    return(score)
+
+score_game(game_core)
